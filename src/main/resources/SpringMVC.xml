@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx 
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop 
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/mvc
+        https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+    <!--开启注解扫描-->
+    <context:component-scan base-package="com"/>
+    <!--创建视图解析器-->
+    <bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!--        jsp文件目录-->
+        <property name="prefix" value="/WEB-INF/pages/"/>
+
+        <!--        文件后缀-->
+        <property name="suffix" value=".jsp"/>
+    </bean>
+    <!-- 配置文件解析器对象，要求id名称必须是multipartResolver -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!--        限制上传文件的最大值,以字节为单位 10mb=10*1024*1024-->
+        <property name="maxUploadSize" value="3132706349"/>
+    </bean>
+    <mvc:default-servlet-handler/>
+    <!--    开启SpringMVC框架的注解-->
+    <mvc:annotation-driven />
+    <!-- 设置静态资源不过滤 -->
+    <mvc:resources location="static/css" mapping="static/css/**"/> <!-- 样式 -->
+    <mvc:resources location="static/images" mapping="static/images/**"/> <!-- 图片 -->
+    <mvc:resources location="static/js" mapping="static/js/**"/> <!-- javascript -->
+    <mvc:resources location="static/fonts" mapping="static/fonts/**"/> <!-- 字体 -->
+<!--    &lt;!&ndash;    设置拦截器&ndash;&gt;-->
+<!--    <mvc:interceptors>-->
+<!--        <mvc:interceptor>-->
+<!--            &lt;!&ndash;       要拦截目录地址         黑名单&ndash;&gt;-->
+<!--            <mvc:mapping path="/user/**"/>-->
+<!--            &lt;!&ndash;            不拦截的目录      白名单&ndash;&gt;-->
+<!--            &lt;!&ndash;            <mvc:exclude-mapping path=""/>&ndash;&gt;-->
+<!--            &lt;!&ndash;            拦截时执行的类&ndash;&gt;-->
+<!--            <bean class="com.xing.interceptors.myInterceptor"/>-->
+<!--        </mvc:interceptor>-->
+<!--    </mvc:interceptors>-->
+</beans>

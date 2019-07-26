@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.FileInfoDao">
+
+<!--    根据用户名查找文件名 -->
+    <select id="findByProperty" resultType="com.domain.FileInfo">
+        select * from fileinfo where fuser=#{username} and deletetime = "";
+    </select>
+
+    <!--    显示回收站文件 -->
+    <select id="findByRecycle" resultType="com.domain.FileInfo">
+        select * from fileinfo where fuser=#{username} and deletetime != "";
+    </select>
+
+    <!--    删除单个文件到回收站-->
+    <update id="recycle">
+        update fileinfo set deletetime=#{deleteTime} where fid=#{fid}
+    </update>
+
+    <!--    批量删除到回收站-->
+    <update id="batchRecycle">
+        update fileinfo set deletetime=#{deleteTime} where fid in
+        <foreach item="fid" index="index" collection="list" open="(" separator="," close=")">
+            #{fid}
+        </foreach>
+    </update>
+
+    <!--    恢复单个-->
+    <update id="recover">
+        update fileinfo set deletetime="" where fid=#{fid};
+    </update>
+
+    <!--    批量恢复-->
+    <update id="batchRecover">
+        update fileinfo set deletetime="" where fid in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <!--单个删除-->
+    <delete id="delete">
+        delete from fileinfo where fid=#{fid};
+    </delete>
+
+    <!--批量删除-->
+    <delete id="batchDelete">
+        delete from fileinfo where fid in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+<!--根据id查找  返回String文件名-->
+    <select id="findById" resultType="String">
+        select filename from fileinfo where fid in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <!--根据id查找  返回pojo类-->
+    <select id="fileById" resultType="com.domain.FileInfo">
+        select * from fileinfo where fid =#{fid}
+    </select>
+
+<!--    插入文件信息-->
+    <insert id="insertInfo">
+        insert into fileinfo (filename,filesize,fuser,updatetime,filekey,folder,stringfilesize,deletetime,type) values(#{fileName},#{fileSize},#{fUser},#{upDateTime},#{fileKey},#{folder},#{stringFileSize},#{deleteTime},#{type})
+    </insert>
+
+    <!--    重命名文件-->
+    <update id="modify">
+        update fileinfo set filename=#{fileName} where fid=#{fid};
+    </update>
+
+    <select id="deleteDay" resultType="Integer">
+        selete deleteday from fileinfo where fid=#{fid};
+    </select>
+
+    <select id="search" resultType="com.domain.FileInfo">
+        <bind name="search" value="'%' +searchName + '%'" />
+        select * from fileinfo where fuser=#{username} and  deletetime="" and filename like #{search}
+    </select>
+
+    <select id="searchByVideo" resultType="com.domain.FileInfo">
+        select * from fileinfo where fuser=#{username} and  deletetime=""  and  type=".video"
+    </select>
+
+    <select id="searchByMusic" resultType="com.domain.FileInfo">
+        select * from fileinfo where fuser=#{username}  and  deletetime="" and  type=".music"
+    </select>
+
+    <select id="searchByDoc" resultType="com.domain.FileInfo">
+        select * from fileinfo where fuser=#{username} and  deletetime=""  and  type=".doc"
+    </select>
+
+    <select id="searchByImg" resultType="com.domain.FileInfo">
+        select * from fileinfo where fuser=#{username} and  deletetime=""  and  type=".img"
+    </select>
+
+</mapper>
+
